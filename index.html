@@ -3,33 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cargar y Eliminar Imagen</title>
+    <title>Cargar y Eliminar Imágenes</title>
     <style>
         body {
             text-align: center;
             padding: 20px;
         }
-        #preview {
+        .image-container {
+            margin-top: 20px;
+        }
+        .preview-image {
             max-width: 100%;
             max-height: 400px;
-            margin-top: 20px;
+            margin-bottom: 10px;
         }
     </style>
 </head>
 <body>
-    <h1>Cargar y Eliminar Imagen</h1>
+    <h1>Cargar y Eliminar Imágenes</h1>
     <input type="file" id="inputImage" accept="image/*" onchange="previewImage()">
-    <div id="preview"></div>
-    <button onclick="deleteImage()">Eliminar</button>
+    <div class="image-container" id="imageContainer"></div>
+    <button onclick="deleteImages()">Eliminar Todas</button>
 
     <script>
         function previewImage() {
             var input = document.getElementById('inputImage');
-            var preview = document.getElementById('preview');
-
-            while (preview.firstChild) {
-                preview.removeChild(preview.firstChild);
-            }
+            var imageContainer = document.getElementById('imageContainer');
 
             var file = input.files[0];
             if (file) {
@@ -37,9 +36,8 @@
                 reader.onload = function(e) {
                     var img = document.createElement('img');
                     img.src = e.target.result;
-                    img.style.maxWidth = '100%';
-                    img.style.maxHeight = '400px';
-                    preview.appendChild(img);
+                    img.className = 'preview-image';
+                    imageContainer.appendChild(img);
 
                     // Almacenar la URL de la imagen en localStorage
                     localStorage.setItem('storedImage', e.target.result);
@@ -48,10 +46,10 @@
             }
         }
 
-        function deleteImage() {
-            var preview = document.getElementById('preview');
-            while (preview.firstChild) {
-                preview.removeChild(preview.firstChild);
+        function deleteImages() {
+            var imageContainer = document.getElementById('imageContainer');
+            while (imageContainer.firstChild) {
+                imageContainer.removeChild(imageContainer.firstChild);
             }
 
             // Eliminar la imagen almacenada en localStorage
@@ -62,12 +60,11 @@
         window.onload = function() {
             var storedImage = localStorage.getItem('storedImage');
             if (storedImage) {
-                var preview = document.getElementById('preview');
+                var imageContainer = document.getElementById('imageContainer');
                 var img = document.createElement('img');
                 img.src = storedImage;
-                img.style.maxWidth = '100%';
-                img.style.maxHeight = '400px';
-                preview.appendChild(img);
+                img.className = 'preview-image';
+                imageContainer.appendChild(img);
             }
         };
     </script>
