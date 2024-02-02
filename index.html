@@ -1,15 +1,48 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Uploader de Imágenes</title>
+    <title>Cargar Imagen</title>
+    <style>
+        body {
+            text-align: center;
+            padding: 20px;
+        }
+        #preview {
+            max-width: 100%;
+            max-height: 400px;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Uploader de Imágenes</h1>
-    <form action="upload.php" method="post" enctype="multipart/form-data">
-        <input type="file" name="file" accept="image/*">
-        <button type="submit">Subir Imagen</button>
-    </form>
+    <h1>Cargar Imagen</h1>
+    <input type="file" id="inputImage" accept="image/*" onchange="previewImage()">
+    <div id="preview"></div>
+
+    <script>
+        function previewImage() {
+            var input = document.getElementById('inputImage');
+            var preview = document.getElementById('preview');
+
+            while (preview.firstChild) {
+                preview.removeChild(preview.firstChild);
+            }
+
+            var file = input.files[0];
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    var img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style.maxWidth = '100%';
+                    img.style.maxHeight = '400px';
+                    preview.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
 </body>
 </html>
