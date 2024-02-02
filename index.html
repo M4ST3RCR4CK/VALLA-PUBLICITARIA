@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cargar Imagen</title>
+    <title>Cargar y Eliminar Imagen</title>
     <style>
         body {
             text-align: center;
@@ -17,9 +17,10 @@
     </style>
 </head>
 <body>
-    <h1>Cargar Imagen</h1>
+    <h1>Cargar y Eliminar Imagen</h1>
     <input type="file" id="inputImage" accept="image/*" onchange="previewImage()">
     <div id="preview"></div>
+    <button onclick="deleteImage()">Eliminar</button>
 
     <script>
         function previewImage() {
@@ -45,6 +46,16 @@
                 };
                 reader.readAsDataURL(file);
             }
+        }
+
+        function deleteImage() {
+            var preview = document.getElementById('preview');
+            while (preview.firstChild) {
+                preview.removeChild(preview.firstChild);
+            }
+
+            // Eliminar la imagen almacenada en localStorage
+            localStorage.removeItem('storedImage');
         }
 
         // Recuperar la imagen almacenada al cargar la página
