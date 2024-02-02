@@ -16,6 +16,10 @@
             max-width: 100%;
             max-height: 400px;
             margin-bottom: 10px;
+            cursor: pointer;
+        }
+        .selected {
+            border: 2px solid #007BFF;
         }
     </style>
 </head>
@@ -24,6 +28,7 @@
     <input type="file" id="inputImage" accept="image/*" onchange="previewImage()">
     <div class="image-container" id="imageContainer"></div>
     <button onclick="deleteImages()">Eliminar Todas</button>
+    <button onclick="deleteSelectedImage()">Eliminar Seleccionada</button>
 
     <script>
         function previewImage() {
@@ -37,6 +42,9 @@
                     var img = document.createElement('img');
                     img.src = e.target.result;
                     img.className = 'preview-image';
+                    img.onclick = function() {
+                        selectImage(this);
+                    };
                     imageContainer.appendChild(img);
 
                     // Obtener el array actual de imágenes almacenadas
@@ -52,6 +60,17 @@
             }
         }
 
+        function selectImage(selectedImage) {
+            // Desmarcar todas las imágenes
+            var images = document.getElementsByClassName('preview-image');
+            for (var i = 0; i < images.length; i++) {
+                images[i].classList.remove('selected');
+            }
+
+            // Marcar la imagen seleccionada
+            selectedImage.classList.add('selected');
+        }
+
         function deleteImages() {
             var imageContainer = document.getElementById('imageContainer');
             while (imageContainer.firstChild) {
@@ -60,6 +79,25 @@
 
             // Limpiar el array de imágenes almacenadas en localStorage
             localStorage.removeItem('storedImages');
+        }
+
+        function deleteSelectedImage() {
+            var selectedImage = document.querySelector('.preview-image.selected');
+            if (selectedImage) {
+                // Eliminar la imagen seleccionada del DOM
+                selectedImage.remove();
+
+                // Obtener el array actual de imágenes almacenadas
+                var storedImages = JSON.parse(localStorage.getItem('storedImages')) || [];
+
+                // Filtrar el array para excluir la imagen eliminada
+                storedImages = storedImages.filter(function(imageUrl) {
+                    return imageUrl !== selectedImage.src;
+                });
+
+                // Almacenar el array actualizado en localStorage
+                localStorage.setItem('storedImages', JSON.stringify(storedImages));
+            }
         }
 
         // Recuperar las imágenes almacenadas al cargar la página
@@ -72,6 +110,9 @@
                 var img = document.createElement('img');
                 img.src = imageUrl;
                 img.className = 'preview-image';
+                img.onclick = function() {
+                    selectImage(this);
+                };
                 imageContainer.appendChild(img);
             });
         };
