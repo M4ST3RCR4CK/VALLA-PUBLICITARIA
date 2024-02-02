@@ -25,38 +25,34 @@
 </head>
 <body>
     <h1>Cargar y Eliminar Imágenes</h1>
-    <input type="file" id="inputImage" accept="image/*" onchange="previewImage()">
+    <input type="text" id="imageUrlInput" placeholder="Introduce la URL de la imagen">
+    <button onclick="previewImage()">Cargar Imagen</button>
     <div class="image-container" id="imageContainer"></div>
     <button onclick="deleteImages()">Eliminar Todas</button>
     <button onclick="deleteSelectedImage()">Eliminar Seleccionada</button>
 
     <script>
         function previewImage() {
-            var input = document.getElementById('inputImage');
+            var imageUrlInput = document.getElementById('imageUrlInput').value;
             var imageContainer = document.getElementById('imageContainer');
 
-            var file = input.files[0];
-            if (file) {
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                    var img = document.createElement('img');
-                    img.src = e.target.result;
-                    img.className = 'preview-image';
-                    img.onclick = function() {
-                        selectImage(this);
-                    };
-                    imageContainer.appendChild(img);
-
-                    // Obtener el array actual de imágenes almacenadas
-                    var storedImages = JSON.parse(localStorage.getItem('storedImages')) || [];
-                    
-                    // Agregar la nueva imagen al array
-                    storedImages.push(e.target.result);
-                    
-                    // Almacenar el array actualizado en localStorage
-                    localStorage.setItem('storedImages', JSON.stringify(storedImages));
+            if (imageUrlInput) {
+                var img = document.createElement('img');
+                img.src = imageUrlInput;
+                img.className = 'preview-image';
+                img.onclick = function() {
+                    selectImage(this);
                 };
-                reader.readAsDataURL(file);
+                imageContainer.appendChild(img);
+
+                // Obtener el array actual de imágenes almacenadas
+                var storedImages = JSON.parse(localStorage.getItem('storedImages')) || [];
+                
+                // Agregar la nueva URL de la imagen al array
+                storedImages.push(imageUrlInput);
+                
+                // Almacenar el array actualizado en localStorage
+                localStorage.setItem('storedImages', JSON.stringify(storedImages));
             }
         }
 
