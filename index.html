@@ -44,15 +44,6 @@
                     selectImage(this);
                 };
                 imageContainer.appendChild(img);
-
-                // Obtener el array actual de imágenes almacenadas
-                var storedImages = JSON.parse(localStorage.getItem('storedImages')) || [];
-                
-                // Agregar la nueva URL de la imagen al array
-                storedImages.push(imageUrlInput);
-                
-                // Almacenar el array actualizado en localStorage
-                localStorage.setItem('storedImages', JSON.stringify(storedImages));
             }
         }
 
@@ -72,9 +63,6 @@
             while (imageContainer.firstChild) {
                 imageContainer.removeChild(imageContainer.firstChild);
             }
-
-            // Limpiar el array de imágenes almacenadas en localStorage
-            localStorage.removeItem('storedImages');
         }
 
         function deleteSelectedImage() {
@@ -82,36 +70,8 @@
             if (selectedImage) {
                 // Eliminar la imagen seleccionada del DOM
                 selectedImage.remove();
-
-                // Obtener el array actual de imágenes almacenadas
-                var storedImages = JSON.parse(localStorage.getItem('storedImages')) || [];
-
-                // Filtrar el array para excluir la imagen eliminada
-                storedImages = storedImages.filter(function(imageUrl) {
-                    return imageUrl !== selectedImage.src;
-                });
-
-                // Almacenar el array actualizado en localStorage
-                localStorage.setItem('storedImages', JSON.stringify(storedImages));
             }
         }
-
-        // Recuperar las imágenes almacenadas al cargar la página
-        window.onload = function() {
-            var storedImages = JSON.parse(localStorage.getItem('storedImages')) || [];
-            var imageContainer = document.getElementById('imageContainer');
-            
-            // Crear elementos de imagen para cada URL almacenada
-            storedImages.forEach(function(imageUrl) {
-                var img = document.createElement('img');
-                img.src = imageUrl;
-                img.className = 'preview-image';
-                img.onclick = function() {
-                    selectImage(this);
-                };
-                imageContainer.appendChild(img);
-            });
-        };
     </script>
 </body>
 </html>
