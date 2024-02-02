@@ -39,8 +39,14 @@
                     img.className = 'preview-image';
                     imageContainer.appendChild(img);
 
-                    // Almacenar la URL de la imagen en localStorage
-                    localStorage.setItem('storedImage', e.target.result);
+                    // Obtener el array actual de imágenes almacenadas
+                    var storedImages = JSON.parse(localStorage.getItem('storedImages')) || [];
+                    
+                    // Agregar la nueva imagen al array
+                    storedImages.push(e.target.result);
+                    
+                    // Almacenar el array actualizado en localStorage
+                    localStorage.setItem('storedImages', JSON.stringify(storedImages));
                 };
                 reader.readAsDataURL(file);
             }
@@ -52,20 +58,22 @@
                 imageContainer.removeChild(imageContainer.firstChild);
             }
 
-            // Eliminar la imagen almacenada en localStorage
-            localStorage.removeItem('storedImage');
+            // Limpiar el array de imágenes almacenadas en localStorage
+            localStorage.removeItem('storedImages');
         }
 
-        // Recuperar la imagen almacenada al cargar la página
+        // Recuperar las imágenes almacenadas al cargar la página
         window.onload = function() {
-            var storedImage = localStorage.getItem('storedImage');
-            if (storedImage) {
-                var imageContainer = document.getElementById('imageContainer');
+            var storedImages = JSON.parse(localStorage.getItem('storedImages')) || [];
+            var imageContainer = document.getElementById('imageContainer');
+            
+            // Crear elementos de imagen para cada URL almacenada
+            storedImages.forEach(function(imageUrl) {
                 var img = document.createElement('img');
-                img.src = storedImage;
+                img.src = imageUrl;
                 img.className = 'preview-image';
                 imageContainer.appendChild(img);
-            }
+            });
         };
     </script>
 </body>
