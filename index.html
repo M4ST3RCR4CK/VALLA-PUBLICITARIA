@@ -39,10 +39,26 @@
                     img.style.maxWidth = '100%';
                     img.style.maxHeight = '400px';
                     preview.appendChild(img);
+
+                    // Almacenar la URL de la imagen en localStorage
+                    localStorage.setItem('storedImage', e.target.result);
                 };
                 reader.readAsDataURL(file);
             }
         }
+
+        // Recuperar la imagen almacenada al cargar la página
+        window.onload = function() {
+            var storedImage = localStorage.getItem('storedImage');
+            if (storedImage) {
+                var preview = document.getElementById('preview');
+                var img = document.createElement('img');
+                img.src = storedImage;
+                img.style.maxWidth = '100%';
+                img.style.maxHeight = '400px';
+                preview.appendChild(img);
+            }
+        };
     </script>
 </body>
 </html>
